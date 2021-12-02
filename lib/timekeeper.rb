@@ -2,7 +2,7 @@ require 'optparse'
 
 BILLABLE_RATIO = 0.935
 
-class NavaTimekeeper
+class Timekeeper
   attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format
 
   def initialize
@@ -58,9 +58,9 @@ class NavaTimekeeper
 
   def parse
     OptionParser.new do |parser|
-      parser.banner = 'Usage: nava-timekeeper [options]'
+      parser.banner = 'Usage: timekeeper [options]'
       parser.separator ''
-      parser.separator 'Calculates your Nava Timekeeper Math for you. Assumes a goal of 93.5% billable, and that you do not wish to work more than the minimum hours for this time period (aka 40/wk).'
+      parser.separator 'Calculates your Timekeeper Math for you. Assumes a goal of 93.5% billable, and that you do not wish to work more than the minimum hours for this time period (aka 40/wk).'
       parser.separator ''
       parser.separator 'Note this program outputs exact minutes, i.e. 4h:23m (4.39h), while in reality we use 15m (0.25h) blocks at the smallest. Clock & Decimal outputs round to two places, CSV is exact.'
       parser.separator ''
