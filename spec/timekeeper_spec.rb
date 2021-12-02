@@ -52,3 +52,62 @@ RSpec.describe Timekeeper, "#calculate" do
     end
   end
 end
+
+RSpec.describe Timekeeper, "#print" do
+  context "format decimal" do
+    expected_result = "For a time period of 88 hours with 0 hours leave:\n    Billable hours goal: 82.28\n     Nonbillable budget: 5.72"
+
+    context "no format given" do
+      it "gives the decimal format" do
+        timekeeper = Timekeeper.new
+        timekeeper.calculate
+
+        expect(timekeeper.print).to eq(expected_result)
+      end
+    end
+
+    context "when specified" do
+      it "gives the decimal format" do
+        timekeeper = Timekeeper.new
+        timekeeper.format = 'decimal'
+        timekeeper.calculate
+
+        expect(timekeeper.print).to eq(expected_result)
+      end
+    end
+
+    context "as a fallback" do
+      it "gives the decimal format" do
+        timekeeper = Timekeeper.new
+        timekeeper.format = 'foo'
+        timekeeper.calculate
+
+        expect(timekeeper.print).to eq(expected_result)
+      end
+    end
+  end
+
+  context "format clock" do
+    it "gives the proper clock format" do
+      timekeeper = Timekeeper.new
+      timekeeper.format = 'clock'
+      timekeeper.calculate
+
+      expected_result = "For a time period of 88h with 0h leave:\n    Billable hours goal: 82h:17m\n     Nonbillable budget: 5h:43m"
+
+      expect(timekeeper.print).to eq(expected_result)
+    end
+  end
+
+  context "format csv" do
+    it "gives the proper csv format" do
+      timekeeper = Timekeeper.new
+      timekeeper.format = 'csv'
+      timekeeper.calculate
+
+      expected_result = "minimum_hours,leave,billable_minimum,nonbillable_budget\n88,0,82.28,5.719999999999999"
+
+      expect(timekeeper.print).to eq(expected_result)
+    end
+  end
+end

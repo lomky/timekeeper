@@ -19,26 +19,26 @@ class Timekeeper
 
   def print
     if self.format == 'clock'
-      puts print_time
+      format_clock
     elsif self.format == 'csv'
-      puts print_csv
+      format_csv
     else
-      puts print_decimal
+      format_decimal
     end
   end
 
-  def print_csv
+  def format_csv
     "minimum_hours,leave,billable_minimum,nonbillable_budget\n#{self.minimum_hours},#{self.leave},#{self.billable_minimum},#{self.nonbillable_budget}"
   end
 
-  def print_decimal
-    "For a time period of #{self.minimum_hours} with #{self.leave} hours leave:\n\
+  def format_decimal
+    "For a time period of #{self.minimum_hours} hours with #{self.leave} hours leave:\n\
     Billable hours goal: #{self.billable_minimum.round(2)}\n\
      Nonbillable budget: #{self.nonbillable_budget.round(2)}"
   end
 
-  def print_time
-    "For a time period of #{self.minimum_hours} with #{to_hour_minute(self.leave)} leave:\n\
+  def format_clock
+    "For a time period of #{self.minimum_hours}h with #{to_hour_minute(self.leave)} leave:\n\
     Billable hours goal: #{to_hour_minute(self.billable_minimum)}\n\
      Nonbillable budget: #{to_hour_minute(self.nonbillable_budget)}"
   end
