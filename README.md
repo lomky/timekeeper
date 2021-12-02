@@ -10,18 +10,21 @@ Clock & Decimal outputs round to two places, CSV is exact.
 
 ## Installation
 
-Clone the repo
-
 ### Docker
+Will run an interactive docker container that you can then run the command line script in
+
 ```bash
+git clone https://github.com/lomky/timekeeper
+cd timekeeper
 docker build -t timekeeper --rm .
 docker run -it  --name timekeeper --rm timekeeper
 ```
 
 ### rbenv
 ```bash
+git clone https://github.com/lomky/timekeeper
 cd timekeeper
-rbenv install 3.0.3 #or your preferred env manager
+rbenv install 3.0.3
 rbenv local 3.0.3
 
 gem install bundler
@@ -35,8 +38,8 @@ Figuring out your budget for a time period with 88 hours (default), and two days
 ```bash
 $ ./timekeeper -l 16
 For a time period of 88 with 16.0 hours leave:
-Billable hours goal: 67.32
- Nonbillable budget: 4.68
+    Billable hours goal: 67.32
+     Nonbillable budget: 4.68
 ```
 
 Checking your usage at submit, for a 80 hour time period, with a half day sick & a holiday
@@ -44,17 +47,17 @@ Checking your usage at submit, for a 80 hour time period, with a half day sick &
 ```bash
 $ ./timekeeper --leave 12 --minimum 80
 For a time period of 80 with 12.0 hours leave:
-Billable hours goal: 63.58
- Nonbillable budget: 4.42
+    Billable hours goal: 63.58
+     Nonbillable budget: 4.42
 ```
 
 Figuring out your billable minimum for a time period with 94 hours and no leave, shown in HH:MM
 
 ```bash
-./timekeeper -m 80 -f clock
-For a time period of 80 with 0h leave:
-Billable hours goal: 74h:48m
- Nonbillable budget: 5h:12m
+./timekeeper -m 94 -f clock
+For a time period of 94h with 0h leave:
+    Billable hours goal: 87h:53m
+     Nonbillable budget: 6h:7m
 ```
 
 Getting a CSV output for further processing.
