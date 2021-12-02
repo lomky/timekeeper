@@ -24,7 +24,7 @@ docker-compose exec app ./timekeeper
 ### rbenv
 ```bash
 git clone https://github.com/lomky/timekeeper
-cd timekeeper
+cd timekeeper/app
 rbenv install 3.0.3
 rbenv local 3.0.3
 
