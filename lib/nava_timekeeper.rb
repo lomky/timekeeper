@@ -3,10 +3,10 @@ require 'optparse'
 BILLABLE_RATIO = 0.935
 
 class NavaTimekeeper
-  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :hour_minutes
+  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format
 
   def initialize
-    self.hour_minutes = false
+    self.format = 'decimal'
     self.minimum_hours = 88
     self.leave = 0
   end
@@ -18,23 +18,29 @@ class NavaTimekeeper
   end
 
   def print
-    if self.hour_minutes
-      print_time
+    if self.format == 'clock'
+      puts print_time
+    elsif self.format == 'csv'
+      puts print_csv
     else
-      print_decimal
+      puts print_decimal
     end
   end
 
+  def print_csv
+    "minimum_hours,leave,billable_minimum,nonbillable_budget\n#{self.minimum_hours},#{self.leave},#{self.billable_minimum},#{self.nonbillable_budget}"
+  end
+
   def print_decimal
-    puts "For a time period of #{self.minimum_hours} with #{self.leave} hours leave:"
-    puts "Billable hours goal: #{self.billable_minimum.round(2)}"
-    puts " Nonbillable budget: #{self.nonbillable_budget.round(2)}"
+    "For a time period of #{self.minimum_hours} with #{self.leave} hours leave:\n\
+    Billable hours goal: #{self.billable_minimum.round(2)}\n\
+     Nonbillable budget: #{self.nonbillable_budget.round(2)}"
   end
 
   def print_time
-    puts "For a time period of #{self.minimum_hours} with #{to_hour_minute(self.leave)} leave:"
-    puts "Billable hours goal: #{to_hour_minute(self.billable_minimum)}"
-    puts " Nonbillable budget: #{to_hour_minute(self.nonbillable_budget)}"
+    "For a time period of #{self.minimum_hours} with #{to_hour_minute(self.leave)} leave:\n\
+    Billable hours goal: #{to_hour_minute(self.billable_minimum)}\n\
+     Nonbillable budget: #{to_hour_minute(self.nonbillable_budget)}"
   end
 
   def to_hour_minute(time)
@@ -54,9 +60,9 @@ class NavaTimekeeper
     OptionParser.new do |parser|
       parser.banner = 'Usage: nava-timekeeper [options]'
       parser.separator ''
-      parser.separator 'Calculates your Nava Timekeeping Math for you. Assumes a goal of 93.5% billable, and that you do not wish to work more than the minimum hours for this time period (aka 40/wk).'
+      parser.separator 'Calculates your Nava Timekeeper Math for you. Assumes a goal of 93.5% billable, and that you do not wish to work more than the minimum hours for this time period (aka 40/wk).'
       parser.separator ''
-      parser.separator 'Note this program outputs exact minutes, i.e. 4h:23m (4.39h), while in reality we use 15m (0.25h) blocks at the smallest.'
+      parser.separator 'Note this program outputs exact minutes, i.e. 4h:23m (4.39h), while in reality we use 15m (0.25h) blocks at the smallest. Clock & Decimal outputs round to two places, CSV is exact.'
       parser.separator ''
 
       parser.on('-m', '--minimum MIN', Integer, 'Mimimum hours requires for the timesheet. Default 88.') do |minimum|
@@ -67,8 +73,8 @@ class NavaTimekeeper
         self.leave = leave
       end
 
-      parser.on('-c', '--clock', 'Display output in HH:MM time instead of the default, decimal') do |hour_minutes|
-        self.hour_minutes = hour_minutes
+      parser.on('-f', '--format FORMAT', 'Display output clock, csv, or decimal (default)') do |format|
+        self.format = format
       end
 
       parser.on('-h', '--help', 'Show this message') do
