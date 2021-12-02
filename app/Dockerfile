@@ -1,4 +1,4 @@
-FROM ruby:3.0.3
+FROM ruby:slim
 
 # throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
