@@ -16,8 +16,9 @@ Will run an interactive docker container that you can then run the command line 
 ```bash
 git clone https://github.com/lomky/timekeeper
 cd timekeeper
-docker build -t timekeeper --rm .
-docker run -it  --name timekeeper --rm timekeeper
+docker-compose build
+docker-compose up -d
+docker-compose exec app ./timekeeper
 ```
 
 ### rbenv
