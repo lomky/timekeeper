@@ -1,13 +1,15 @@
 FROM ruby:slim
 
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends cron
 
 WORKDIR /usr/src/app
+COPY Gemfile Gemfile.lock timekeeper ./
+COPY lib lib
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+# throw errors if Gemfile has been modified since Gemfile.lock
+RUN bundle config --global frozen 1 \
+  && bundle install
 
-COPY . .
-
-CMD ["bash"]
+# Run cron in the foreground to prevent app from exiting
+CMD ["cron", "-f"]
