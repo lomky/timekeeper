@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  app:
+    build: app
+    # Uncomment for local docker-based development
+    # volumes:
+    #   - ./app:/usr/src/app
