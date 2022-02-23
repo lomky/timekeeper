@@ -90,7 +90,7 @@ class Timekeeper
         self.format = format
       end
 
-      parser.on('-n', '--manager MANAGER', String, '"regular", "overloaded", "individual", defaults to "individual"') do |manager|
+      parser.on('-n', '--manager MANAGER', String, 'regular, overloaded, or IC (default)') do |manager|
         self.manager = manager
       end
 
