@@ -61,6 +61,14 @@ For a time period of 94h with 0h leave:
      Nonbillable budget: 6h:7m
 ```
 
+Figuring out your billable minimum as a manager with 3 reports for a short week
+```bash
+/timekeeper -n regular -m 40 -l 8
+For a time period of 40 hours with 8.0 hours leave:
+    Billable hours goal: 28.0
+     Nonbillable budget: 4.0
+```
+
 Getting a CSV output for further processing.
 
 ```bash
