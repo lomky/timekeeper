@@ -1,9 +1,11 @@
 require 'optparse'
 
 BILLABLE_RATIO = 0.935
+BILLABLE_RATIO_MANAGER = 0.875
+BILLABLE_RATIO_OVERLOADED_MANAGER = 0.85
 
 class Timekeeper
-  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format
+  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format, :manager
 
   def initialize
     self.format = 'decimal'
@@ -13,8 +15,19 @@ class Timekeeper
 
   def calculate
     effective_time = (self.minimum_hours - self.leave)
-    self.billable_minimum = effective_time * BILLABLE_RATIO
+    self.billable_minimum = effective_time * billable_ratio
     self.nonbillable_budget = effective_time - self.billable_minimum
+  end
+
+  def billable_ratio
+    if self.manager == 'regular'
+      BILLABLE_RATIO_MANAGER
+    elsif self.manager == 'overloaded'
+      BILLABLE_RATIO_OVERLOADED_MANAGER
+    else
+      BILLABLE_RATIO
+    end
+
   end
 
   def print
@@ -75,6 +88,10 @@ class Timekeeper
 
       parser.on('-f', '--format FORMAT', 'Display output clock, csv, or decimal (default)') do |format|
         self.format = format
+      end
+
+      parser.on('-n', '--manager MANAGER', String, '"regular", "overloaded", "individual", defaults to "individual"') do |manager|
+        self.manager = manager
       end
 
       parser.on('-h', '--help', 'Show this message') do

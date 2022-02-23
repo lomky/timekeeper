@@ -38,6 +38,19 @@ RSpec.describe Timekeeper, "#calculate" do
     end
   end
 
+  context "for a manager" do
+    it "gives the right numbers" do
+      timekeeper = Timekeeper.new
+
+      timekeeper.manager = 'regular'
+
+      timekeeper.calculate
+
+      expect(timekeeper.billable_minimum.round(2)).to eq(77)
+      expect(timekeeper.nonbillable_budget.round(2)).to eq(11)
+    end
+  end
+
   context "with set minimum_hours and leave" do
     it "gives the right numbers" do
       timekeeper = Timekeeper.new
@@ -51,6 +64,23 @@ RSpec.describe Timekeeper, "#calculate" do
       expect(timekeeper.nonbillable_budget.round(2)).to eq(4.08)
     end
   end
+
+  context "with set minimum_hours and leave as a manager" do
+    it "gives the right numbers" do
+      timekeeper = Timekeeper.new
+
+      timekeeper.minimum_hours = 40
+      timekeeper.leave = 8
+      timekeeper.manager = 'overloaded'
+
+      timekeeper.calculate
+
+      expect(timekeeper.billable_minimum.round(2)).to eq(27.2)
+      expect(timekeeper.nonbillable_budget.round(2)).to eq(4.8)
+    end
+  end
+
+
 end
 
 RSpec.describe Timekeeper, "#print" do
