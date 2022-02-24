@@ -80,6 +80,21 @@ RSpec.describe Timekeeper, "#calculate" do
     end
   end
 
+  context "for the inverse calculation" do
+    it "gives the right percentage" do
+      timekeeper = Timekeeper.new
+
+      timekeeper.minimum_hours = 40
+      timekeeper.leave = 8
+      timekeeper.reverse = 30
+
+      timekeeper.calculate
+
+      expect(timekeeper.billable_minimum.round(2)).to eq(93.75)
+      expect(timekeeper.nonbillable_budget.round(2)).to eq(6.25)
+    end
+  end
+
 
 end
 

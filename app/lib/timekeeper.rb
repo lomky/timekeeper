@@ -5,7 +5,7 @@ BILLABLE_RATIO_MANAGER = 0.875
 BILLABLE_RATIO_OVERLOADED_MANAGER = 0.85
 
 class Timekeeper
-  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format, :manager
+  attr_accessor :minimum_hours, :leave, :billable_minimum, :nonbillable_budget, :format, :manager, :reverse
 
   def initialize
     self.format = 'decimal'
@@ -14,9 +14,14 @@ class Timekeeper
   end
 
   def calculate
-    effective_time = (self.minimum_hours - self.leave)
-    self.billable_minimum = effective_time * billable_ratio
-    self.nonbillable_budget = effective_time - self.billable_minimum
+    effective_time = (self.minimum_hours.to_f - self.leave)
+    if self.reverse
+      self.billable_minimum = self.reverse / effective_time * 100
+      self.nonbillable_budget = (effective_time - self.reverse) / effective_time * 100
+    else
+      self.billable_minimum = effective_time * billable_ratio
+      self.nonbillable_budget = effective_time - self.billable_minimum
+    end
   end
 
   def billable_ratio
@@ -31,7 +36,9 @@ class Timekeeper
   end
 
   def print
-    if self.format == 'clock'
+    if self.reverse
+      format_percent
+    elsif self.format == 'clock'
       format_clock
     elsif self.format == 'csv'
       format_csv
@@ -54,6 +61,12 @@ class Timekeeper
     "For a time period of #{self.minimum_hours}h with #{to_hour_minute(self.leave)} leave:\n\
     Billable hours goal: #{to_hour_minute(self.billable_minimum)}\n\
      Nonbillable budget: #{to_hour_minute(self.nonbillable_budget)}"
+  end
+
+  def format_percent
+    "For a time period of #{self.minimum_hours} hours with #{self.leave} hours leave, with #{self.reverse} billable hours:\n\
+    Billable hours percentage: #{self.billable_minimum.round(2)}%\n\
+       Nonbillable percentage: #{self.nonbillable_budget.round(2)}%"
   end
 
   def to_hour_minute(time)
@@ -92,6 +105,10 @@ class Timekeeper
 
       parser.on('-n', '--manager MANAGER', String, 'regular, overloaded, or IC (default)') do |manager|
         self.manager = manager
+      end
+
+      parser.on('-r', '--reverse HOURS', Float, 'Inverts the calculation and tells you your percentages') do |reverse|
+        self.reverse = reverse
       end
 
       parser.on('-h', '--help', 'Show this message') do
